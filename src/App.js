@@ -9,7 +9,7 @@ export default function App() {
     const images = useImages();
     const {
         cards,
-        onSelectCard,
+        handleSelectCard,
         handleEquivalencyOfCardsSelected
     } = useCards(images);
     const {
@@ -23,7 +23,7 @@ export default function App() {
         <div>
             <Cards
                 cards={cards}
-                onSelectCard={gameState === "turn-in-progress" ? onSelectCard : () => {}}
+                onSelectCard={gameState === "turn-in-progress" ? handleSelectCard : () => {}}
             />
             {gameState === "ready-to-start" && (
                 <button onClick={onStartGame}>

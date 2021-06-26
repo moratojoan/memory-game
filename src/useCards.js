@@ -28,7 +28,7 @@ export function useCards(images) {
         if(cardsSelected.length < 2) {
             return;
         }
-        
+
         return new Promise(resolve => {
             function unselectAllCards() {
                 const cardsUpdated = cards.map(card => ({
@@ -37,12 +37,25 @@ export function useCards(images) {
                 }));
                 setCards(cardsUpdated);
             }
-
-            const waitingTimeToUnselect = 1000;
+            function markSelectedCardsAsDiscovered() {
+                const idsOfSelectedCards = cardsSelected.map(({id}) => id);
+                const cardsUpdated = cards.map(card => {
+                    if(!idsOfSelectedCards.includes(card.id)) {
+                        return card;
+                    }
+                    return {
+                        ...card,
+                        selected: false,
+                        discovered: true
+                    }
+                });
+                setCards(cardsUpdated);
+            }
 
             const imageIdToCheck = cardsSelected[0].imageId;
             const sameImages = cardsSelected.every(({imageId}) => imageId === imageIdToCheck);
             if(!sameImages) {
+                const waitingTimeToUnselect = 1000;
                 setTimeout(() => {
                     unselectAllCards();
                     resolve(sameImages);
@@ -50,24 +63,14 @@ export function useCards(images) {
                 return;
             }
 
-            const cardsUpdated = cards.map(card => {
-                if(card.id !== cardsSelected[0].id && card.id !== cardsSelected[1].id) {
-                    return card;
-                }
-                return {
-                    ...card,
-                    selected: false,
-                    discovered: true
-                }
-            });
-            setCards(cardsUpdated);
+            markSelectedCardsAsDiscovered();
             resolve(sameImages);
-        })
+        });
     }
 
     return {
         cards,
-        onSelectCard: handleSelectCard,
+        handleSelectCard,
         handleEquivalencyOfCardsSelected
     };
 }
