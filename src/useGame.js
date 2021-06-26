@@ -36,6 +36,6 @@ export function useGame(cards, actions) {
 
     return {
         gameState: state,
-        onStartGame: handleStartGame
+        handleStartGame
     }
 }

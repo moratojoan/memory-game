@@ -14,7 +14,7 @@ export default function App() {
     } = useCards(images);
     const {
         gameState,
-        onStartGame
+        handleStartGame
     } = useGame(cards, {
         handleEquivalencyOfCardsSelected
     });
@@ -26,7 +26,7 @@ export default function App() {
                 onSelectCard={gameState === "turn-in-progress" ? handleSelectCard : () => {}}
             />
             {gameState === "ready-to-start" && (
-                <button onClick={onStartGame}>
+                <button onClick={handleStartGame}>
                     Start Game
                 </button>
             )}
