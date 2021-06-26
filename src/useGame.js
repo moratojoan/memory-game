@@ -38,10 +38,14 @@ export function useGame(cards, actions) {
                 );
             }
         } else if(state === possibleGameStates.checkTurnEnded) {
-            const newState = actions.allCardsHaveBeenDiscovered()
-                ? possibleGameStates.win
-                : possibleGameStates.turnInProgress;
-            setState(newState);
+            if(actions.allCardsHaveBeenDiscovered()) {
+                const waitingTimeToFinishTheGame = 1000;
+                setTimeout(() => {
+                    setState(possibleGameStates.win);
+                }, waitingTimeToFinishTheGame);
+            } else {
+                setState(possibleGameStates.turnInProgress);
+            }
         }
     }, [state, cards, actions]);
 
