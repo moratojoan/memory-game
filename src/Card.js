@@ -5,12 +5,13 @@ export default function Card({
     url,
     alt,
     selected,
+    discovered,
     onClick
 }) {
 
     return (
         <div
-            className={selected ? "card selected" : "card"}
+            className={(selected || discovered) ? "card selected" : "card"}
             onClick={onClick}
         >
             <div className="card-inner">

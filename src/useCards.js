@@ -24,9 +24,51 @@ export function useCards(images) {
         setCards(cardsUpdated);
     }
 
+    function handleEquivalencyOfCardsSelected(cardsSelected) {
+        if(cardsSelected.length < 2) {
+            return;
+        }
+        
+        return new Promise(resolve => {
+            function unselectAllCards() {
+                const cardsUpdated = cards.map(card => ({
+                    ...card,
+                    selected: false
+                }));
+                setCards(cardsUpdated);
+            }
+
+            const waitingTimeToUnselect = 1000;
+
+            const imageIdToCheck = cardsSelected[0].imageId;
+            const sameImages = cardsSelected.every(({imageId}) => imageId === imageIdToCheck);
+            if(!sameImages) {
+                setTimeout(() => {
+                    unselectAllCards();
+                    resolve(sameImages);
+                }, waitingTimeToUnselect);
+                return;
+            }
+
+            const cardsUpdated = cards.map(card => {
+                if(card.id !== cardsSelected[0].id && card.id !== cardsSelected[1].id) {
+                    return card;
+                }
+                return {
+                    ...card,
+                    selected: false,
+                    discovered: true
+                }
+            });
+            setCards(cardsUpdated);
+            resolve(sameImages);
+        })
+    }
+
     return {
         cards,
-        onSelectCard: handleSelectCard
+        onSelectCard: handleSelectCard,
+        handleEquivalencyOfCardsSelected
     };
 }
 
@@ -46,7 +88,8 @@ function getCards(images) {
         imageId: images[imageIndex].id,
         url: images[imageIndex].url,
         alt: images[imageIndex].alt,
-        selected: false
+        selected: false,
+        discovered: false
     }));
 
     const duplicatedCards = singleCards.flatMap((card) => (
