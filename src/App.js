@@ -1,5 +1,7 @@
 import Cards from './Cards';
 
+import { useImages } from './useImages';
+
 
 const cards = [
   {
@@ -65,6 +67,8 @@ const cards = [
 ];
 
 export default function App() {
+  const images = useImages();
+
   return (
     <div>
       <Cards cards={cards} />
