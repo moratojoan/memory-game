@@ -68,10 +68,15 @@ export function useCards(images) {
         });
     }
 
+    function allCardsHaveBeenDiscovered() {
+        return cards.every(({discovered}) => discovered);
+    }
+
     return {
         cards,
         handleSelectCard,
-        handleEquivalencyOfCardsSelected
+        handleEquivalencyOfCardsSelected,
+        allCardsHaveBeenDiscovered
     };
 }
 

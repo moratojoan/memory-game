@@ -1,40 +1,47 @@
 import { useState, useEffect } from "react";
 
 
-/* 
-    game states:
-        ready-to-start,
-        turn-in-progress,
-        checking-turn,
-        win,
-        game-over
-*/
+const possibleGameStates = {
+    readyToStart: "ready-to-start",
+    turnInProgress: "turn-in-progress",
+    checkTurnStarted: "check-turn-started",
+    checkTurnEnded: "check-turn-ended",
+    win: "win",
+    gameOver: "game-over"
+};
+
 export function useGame(cards, actions) {
-    const [state, setState] = useState("ready-to-start");
+    const [state, setState] = useState(possibleGameStates.readyToStart);
 
     function handleStartGame() {
-        setState("turn-in-progress");
+        setState(possibleGameStates.turnInProgress);
     }
 
     async function handleCheckTurn(handleEquivalencyOfCardsSelected, cardsSelected) {
-        setState("checking-turn");
+        setState(possibleGameStates.checkTurnStarted);
         await handleEquivalencyOfCardsSelected(cardsSelected);
-        setState("turn-in-progress");
+        setState(possibleGameStates.checkTurnEnded);
     }
 
     useEffect(() => {
-        if(state === "turn-in-progress") {
-          const cardsSelected = cards.filter(({selected}) => selected);
-          if(cardsSelected.length === 2) {
-            handleCheckTurn(
-                actions.handleEquivalencyOfCardsSelected,
-                cardsSelected
-            );
-          }
+        if(state === possibleGameStates.turnInProgress) {
+            const cardsSelected = cards.filter(({selected}) => selected);
+            if(cardsSelected.length === 2) {
+                handleCheckTurn(
+                    actions.handleEquivalencyOfCardsSelected,
+                    cardsSelected
+                );
+            }
+        } else if(state === possibleGameStates.checkTurnEnded) {
+            const newState = actions.allCardsHaveBeenDiscovered()
+                ? possibleGameStates.win
+                : possibleGameStates.turnInProgress;
+            setState(newState);
         }
     }, [state, cards, actions]);
 
     return {
+        possibleGameStates,
         gameState: state,
         handleStartGame
     }

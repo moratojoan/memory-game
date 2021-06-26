@@ -10,22 +10,28 @@ export default function App() {
     const {
         cards,
         handleSelectCard,
-        handleEquivalencyOfCardsSelected
+        handleEquivalencyOfCardsSelected,
+        allCardsHaveBeenDiscovered
     } = useCards(images);
     const {
+        possibleGameStates,
         gameState,
         handleStartGame
     } = useGame(cards, {
-        handleEquivalencyOfCardsSelected
+        handleEquivalencyOfCardsSelected,
+        allCardsHaveBeenDiscovered
     });
 
     return (
         <div>
             <Cards
                 cards={cards}
-                onSelectCard={gameState === "turn-in-progress" ? handleSelectCard : () => {}}
+                onSelectCard={gameState === possibleGameStates.turnInProgress
+                    ? handleSelectCard
+                    : () => {}
+                }
             />
-            {gameState === "ready-to-start" && (
+            {gameState === possibleGameStates.readyToStart && (
                 <button onClick={handleStartGame}>
                     Start Game
                 </button>
