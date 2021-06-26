@@ -1,12 +1,12 @@
-import Modal from 'react-modal';
-
 import Cards from './Cards';
+import Modal from './Modal';
 
 import { useImages } from './useImages';
 import { useCards } from './useCards';
 import { useGame } from './useGame';
 
-Modal.setAppElement('#root');
+
+
 
 export default function App() {
     const images = useImages();
@@ -45,10 +45,13 @@ export default function App() {
             <Modal
                 isOpen={gameState === possibleGameStates.win}
             >
-                Win
-                <button onClick={handleNewGame}>
-                    New Game
-                </button>
+                <div>
+                    <h1>Congratulations!</h1>
+                    <p>You have won the game!</p>
+                    <button onClick={handleNewGame}>
+                        New Game
+                    </button>
+                </div>
             </Modal>
         </div>
     );
