@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 
 import shuffleArray from './shuffleArray';
+import generateUid from './generateUid';
 
 
 export function useCards(images) {
     const [cards, setCards] = useState([]);
 
     useEffect(() => {
-        const cards = getCards(images);
-        setCards(cards);
+        prepareNewCards(images)
     }, [images]);
 
     function handleSelectCard(id) {
@@ -72,11 +72,17 @@ export function useCards(images) {
         return cards.every(({discovered}) => discovered);
     }
 
+    function prepareNewCards(images) {
+        const cards = getCards(images);
+        setCards(cards);
+    }
+
     return {
         cards,
         handleSelectCard,
         handleEquivalencyOfCardsSelected,
-        allCardsHaveBeenDiscovered
+        allCardsHaveBeenDiscovered,
+        prepareNewCards: () => prepareNewCards(images)
     };
 }
 
@@ -91,8 +97,8 @@ function getCards(images) {
         }
     }
 
-    const singleCards = selectedImageIndex.map((imageIndex, index) => ({
-        id: index,
+    const singleCards = selectedImageIndex.map(imageIndex => ({
+        id: generateUid(),
         imageId: images[imageIndex].id,
         url: images[imageIndex].url,
         alt: images[imageIndex].alt,
@@ -100,12 +106,12 @@ function getCards(images) {
         discovered: false
     }));
 
-    const duplicatedCards = singleCards.flatMap((card) => (
+    const duplicatedCards = singleCards.flatMap(card => (
         [
             card,
             {
                 ...card,
-                id: card.id + numberOfImagesToSelect
+                id: generateUid()
             }
         ]
     ));

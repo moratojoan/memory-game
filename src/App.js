@@ -1,9 +1,12 @@
+import Modal from 'react-modal';
+
 import Cards from './Cards';
 
 import { useImages } from './useImages';
 import { useCards } from './useCards';
 import { useGame } from './useGame';
 
+Modal.setAppElement('#root');
 
 export default function App() {
     const images = useImages();
@@ -11,15 +14,18 @@ export default function App() {
         cards,
         handleSelectCard,
         handleEquivalencyOfCardsSelected,
-        allCardsHaveBeenDiscovered
+        allCardsHaveBeenDiscovered,
+        prepareNewCards
     } = useCards(images);
     const {
         possibleGameStates,
         gameState,
-        handleStartGame
+        handleStartGame,
+        handleNewGame
     } = useGame(cards, {
         handleEquivalencyOfCardsSelected,
-        allCardsHaveBeenDiscovered
+        allCardsHaveBeenDiscovered,
+        prepareNewCards
     });
 
     return (
@@ -36,6 +42,14 @@ export default function App() {
                     Start Game
                 </button>
             )}
+            <Modal
+                isOpen={gameState === possibleGameStates.win}
+            >
+                Win
+                <button onClick={handleNewGame}>
+                    New Game
+                </button>
+            </Modal>
         </div>
     );
 }

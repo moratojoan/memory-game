@@ -23,6 +23,11 @@ export function useGame(cards, actions) {
         setState(possibleGameStates.checkTurnEnded);
     }
 
+    function handleNewGame() {
+        actions.prepareNewCards();
+        setState(possibleGameStates.readyToStart);
+    }
+
     useEffect(() => {
         if(state === possibleGameStates.turnInProgress) {
             const cardsSelected = cards.filter(({selected}) => selected);
@@ -43,6 +48,7 @@ export function useGame(cards, actions) {
     return {
         possibleGameStates,
         gameState: state,
-        handleStartGame
+        handleStartGame,
+        handleNewGame
     }
 }
