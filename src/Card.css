@@ -12,8 +12,12 @@
     transform-style: preserve-3d;
 }
 
-.card:hover .card-inner {
+.selected .card-inner {
     transform: rotateY(180deg);
+}
+
+.card-front {
+    cursor: pointer;
 }
 
 .card-front,

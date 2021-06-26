@@ -6,11 +6,17 @@ import { useCards } from './useCards';
 
 export default function App() {
   const images = useImages();
-  const cards = useCards(images);
+  const {
+    cards,
+    onSelectCard
+  } = useCards(images);
 
   return (
     <div>
-      <Cards cards={cards} />
+      <Cards
+        cards={cards}
+        onSelectCard={onSelectCard}
+      />
     </div>
   );
 }

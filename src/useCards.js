@@ -11,7 +11,23 @@ export function useCards(images) {
         setCards(cards);
     }, [images]);
 
-    return cards;
+    function handleSelectCard(id) {
+        const cardsUpdated = cards.map(card => {
+            if(card.id !== id) return card;
+            if(card.selected) return card;
+
+            return {
+                ...card,
+                selected: true
+            }
+        });
+        setCards(cardsUpdated);
+    }
+
+    return {
+        cards,
+        onSelectCard: handleSelectCard
+    };
 }
 
 function getCards(images) {
@@ -29,7 +45,8 @@ function getCards(images) {
         id: index,
         imageId: images[imageIndex].id,
         url: images[imageIndex].url,
-        alt: images[imageIndex].alt
+        alt: images[imageIndex].alt,
+        selected: false
     }));
 
     const duplicatedCards = singleCards.flatMap((card) => (

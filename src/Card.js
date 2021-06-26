@@ -1,10 +1,18 @@
 import './Card.css';
 
 
-export default function Card({url, alt}) {
+export default function Card({
+    url,
+    alt,
+    selected,
+    onClick
+}) {
 
     return (
-        <div className="card">
+        <div
+            className={selected ? "card selected" : "card"}
+            onClick={onClick}
+        >
             <div className="card-inner">
                 <div className="card-front">
                     ?
