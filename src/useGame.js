@@ -13,11 +13,20 @@ const possibleGameStates = {
 export function useGame(cardsActions, scoreActions) {
     const [state, setState] = useState(possibleGameStates.readyToStart);
 
+
+    function gameIsReadyToStart() {
+        return state === possibleGameStates.readyToStart;
+    }
+
     function handleStartGame() {
         setState(possibleGameStates.turnInProgress);
     }
 
     function handleSelectCard(cardSelectedId) {
+        if(state !== possibleGameStates.turnInProgress) {
+            return;
+        }
+
         cardsActions.handleSelectCard(cardSelectedId);
         setState(possibleGameStates.cardSelected);
     }
@@ -65,6 +74,10 @@ export function useGame(cardsActions, scoreActions) {
         }, waitingTimeToFinishTheGame);
     }
 
+    function playerHasWonTheGame() {
+        return state === possibleGameStates.win;
+    }
+
     function handleNewGame() {
         cardsActions.prepareNewCards();
         scoreActions.resetScore();
@@ -83,9 +96,11 @@ export function useGame(cardsActions, scoreActions) {
         possibleGameStates,
         gameState: state,
         actions: {
+            gameIsReadyToStart,
             handleStartGame,
             handleNewGame,
-            handleSelectCard
+            handleSelectCard,
+            playerHasWonTheGame
         }
     }
 }

@@ -8,8 +8,6 @@ import { useGame } from './useGame';
 import { useScore } from './useScore';
 
 
-
-
 export default function App() {
     const images = useImages();
     const {
@@ -21,34 +19,29 @@ export default function App() {
         actions: socreActions
     } = useScore();
     const {
-        possibleGameStates,
-        gameState,
-        actions
+        actions: gameActions
     } = useGame(cardsActions, socreActions);
 
     return (
         <div>
             <Cards
                 cards={cards}
-                onSelectCard={gameState === possibleGameStates.turnInProgress
-                    ? actions.handleSelectCard
-                    : () => {}
-                }
+                onSelectCard={gameActions.handleSelectCard}
             />
             <Score score={score} />
-            {gameState === possibleGameStates.readyToStart && (
-                <button onClick={actions.handleStartGame}>
+            {gameActions.gameIsReadyToStart() && (
+                <button onClick={gameActions.handleStartGame}>
                     Start Game
                 </button>
             )}
             <Modal
-                isOpen={gameState === possibleGameStates.win}
+                isOpen={gameActions.playerHasWonTheGame()}
             >
                 <div>
                     <h1>Congratulations!</h1>
                     <p>You have won the game!</p>
                     <p>Score: {score}</p>
-                    <button onClick={actions.handleNewGame}>
+                    <button onClick={gameActions.handleNewGame}>
                         New Game
                     </button>
                 </div>
