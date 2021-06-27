@@ -5,8 +5,7 @@ const possibleGameStates = {
     readyToStart: "ready-to-start",
     turnInProgress: "turn-in-progress",
     cardSelected: "card-selected",
-    checkTurnStarted: "check-turn-started",
-    checkTurnEnded: "check-turn-ended",
+    turnFinished: "turn-finished",
     win: "win",
     gameOver: "game-over"
 };
@@ -23,14 +22,47 @@ export function useGame(cardsActions, scoreActions) {
         setState(possibleGameStates.cardSelected);
     }
 
-    async function handleCheckTurn(cardsSelected, checkCards, addPoints) {
-        setState(possibleGameStates.checkTurnStarted);
-        const equivalentCardsFinded = await checkCards(cardsSelected);
-        if(equivalentCardsFinded) {
-            const pointsOnFindEquivalentCards = 100;
-            addPoints(pointsOnFindEquivalentCards);
+    function handleCardHasBeenSelected() {
+        const numberOfSelectedCardsToFinishATurn = 2;
+        const cardsSelected = cardsActions.getSelectedCards();
+
+        const movesInATurnCompleted = cardsSelected.length === numberOfSelectedCardsToFinishATurn;
+        if(!movesInATurnCompleted) {
+            setState(possibleGameStates.turnInProgress);
+            return;
         }
-        setState(possibleGameStates.checkTurnEnded);
+
+        handleMovesInATurnCompleted(cardsSelected);
+    }
+
+    async function handleMovesInATurnCompleted(cardsSelected) {
+        const equivalentCards = cardsActions.cardsAreEquivalent(cardsSelected);
+        if(equivalentCards) {
+            cardsActions.markSelectedCardsAsDiscovered(cardsSelected);
+
+            const pointsOnFindEquivalentCards = 100;
+            scoreActions.addPointsToScore(pointsOnFindEquivalentCards);
+            setState(possibleGameStates.turnFinished);
+        } else {
+            const waitingTimeToUnselect = 1000;
+            setTimeout(() => {
+                cardsActions.unselectAllCards();
+                setState(possibleGameStates.turnFinished);
+            }, waitingTimeToUnselect);
+        }
+    }
+
+    function handleFinishedTurn() {
+        const allCardsHaveBeenDiscovered = cardsActions.allCardsHaveBeenDiscovered();
+        if(!allCardsHaveBeenDiscovered) {
+            setState(possibleGameStates.turnInProgress);
+            return;
+        }
+
+        const waitingTimeToFinishTheGame = 1000;
+        setTimeout(() => {
+            setState(possibleGameStates.win);
+        }, waitingTimeToFinishTheGame);
     }
 
     function handleNewGame() {
@@ -41,26 +73,9 @@ export function useGame(cardsActions, scoreActions) {
 
     useEffect(() => {
         if(state === possibleGameStates.cardSelected) {
-            const cardsSelected = cardsActions.getSelectedCards();
-            const numberOfSelectedCardsToFinishATurn = 2;
-            if(cardsSelected.length === numberOfSelectedCardsToFinishATurn) {
-                handleCheckTurn(
-                    cardsSelected,
-                    cardsActions.handleEquivalencyOfCardsSelected,
-                    scoreActions.addPointsToScore
-                );
-            } else {
-                setState(possibleGameStates.turnInProgress);
-            }
-        } else if(state === possibleGameStates.checkTurnEnded) {
-            if(cardsActions.allCardsHaveBeenDiscovered()) {
-                const waitingTimeToFinishTheGame = 1000;
-                setTimeout(() => {
-                    setState(possibleGameStates.win);
-                }, waitingTimeToFinishTheGame);
-            } else {
-                setState(possibleGameStates.turnInProgress);
-            }
+            handleCardHasBeenSelected();
+        } else if(state === possibleGameStates.turnFinished) {
+            handleFinishedTurn();
         }
     }, [state]);
 

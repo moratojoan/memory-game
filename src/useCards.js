@@ -24,48 +24,37 @@ export function useCards(images) {
         setCards(cardsUpdated);
     }
 
-    function handleEquivalencyOfCardsSelected(cardsSelected) {
-        return new Promise(resolve => {
-            if(cardsSelected.length < 2) {
-                return resolve(false);
-            }
+    function cardsAreEquivalent(cardsSelected) {
+        if(cardsSelected.length < 2) {
+            return false;
+        }
 
-            function unselectAllCards() {
-                const cardsUpdated = cards.map(card => ({
-                    ...card,
-                    selected: false
-                }));
-                setCards(cardsUpdated);
+        const imageIdToCheck = cardsSelected[0].imageId;
+        const sameImages = cardsSelected.every(({imageId}) => imageId === imageIdToCheck);
+        return sameImages;
+    }
+    
+    function markSelectedCardsAsDiscovered(cardsSelected) {
+        const idsOfSelectedCards = cardsSelected.map(({id}) => id);
+        const cardsUpdated = cards.map(card => {
+            if(!idsOfSelectedCards.includes(card.id)) {
+                return card;
             }
-            function markSelectedCardsAsDiscovered() {
-                const idsOfSelectedCards = cardsSelected.map(({id}) => id);
-                const cardsUpdated = cards.map(card => {
-                    if(!idsOfSelectedCards.includes(card.id)) {
-                        return card;
-                    }
-                    return {
-                        ...card,
-                        selected: false,
-                        discovered: true
-                    }
-                });
-                setCards(cardsUpdated);
+            return {
+                ...card,
+                selected: false,
+                discovered: true
             }
-
-            const imageIdToCheck = cardsSelected[0].imageId;
-            const sameImages = cardsSelected.every(({imageId}) => imageId === imageIdToCheck);
-            if(!sameImages) {
-                const waitingTimeToUnselect = 1000;
-                setTimeout(() => {
-                    unselectAllCards();
-                    resolve(sameImages);
-                }, waitingTimeToUnselect);
-                return;
-            }
-
-            markSelectedCardsAsDiscovered();
-            resolve(sameImages);
         });
+        setCards(cardsUpdated);
+    }
+
+    function unselectAllCards() {
+        const cardsUpdated = cards.map(card => ({
+            ...card,
+            selected: false
+        }));
+        setCards(cardsUpdated);
     }
 
     function getSelectedCards() {
@@ -85,10 +74,12 @@ export function useCards(images) {
         cards,
         actions: {
             handleSelectCard,
-            handleEquivalencyOfCardsSelected,
             allCardsHaveBeenDiscovered,
             prepareNewCards: () => prepareNewCards(images),
-            getSelectedCards
+            getSelectedCards,
+            cardsAreEquivalent,
+            markSelectedCardsAsDiscovered,
+            unselectAllCards
         }
     };
 }
