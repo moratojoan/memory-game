@@ -82,8 +82,10 @@ export function useGame(cardsActions, scoreActions) {
     return {
         possibleGameStates,
         gameState: state,
-        handleStartGame,
-        handleNewGame,
-        handleSelectCard
+        actions: {
+            handleStartGame,
+            handleNewGame,
+            handleSelectCard
+        }
     }
 }

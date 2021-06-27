@@ -23,9 +23,7 @@ export default function App() {
     const {
         possibleGameStates,
         gameState,
-        handleStartGame,
-        handleNewGame,
-        handleSelectCard
+        actions
     } = useGame(cardsActions, socreActions);
 
     return (
@@ -33,13 +31,13 @@ export default function App() {
             <Cards
                 cards={cards}
                 onSelectCard={gameState === possibleGameStates.turnInProgress
-                    ? handleSelectCard
+                    ? actions.handleSelectCard
                     : () => {}
                 }
             />
             <Score score={score} />
             {gameState === possibleGameStates.readyToStart && (
-                <button onClick={handleStartGame}>
+                <button onClick={actions.handleStartGame}>
                     Start Game
                 </button>
             )}
@@ -50,7 +48,7 @@ export default function App() {
                     <h1>Congratulations!</h1>
                     <p>You have won the game!</p>
                     <p>Score: {score}</p>
-                    <button onClick={handleNewGame}>
+                    <button onClick={actions.handleNewGame}>
                         New Game
                     </button>
                 </div>
