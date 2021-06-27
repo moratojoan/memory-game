@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 
 function getNow() {
@@ -9,7 +9,7 @@ export function useTimer() {
     const [remainingSeconds, setRemainingSeconds] = useState(60);
     const [setIntervalId, setSetIntervalId] = useState(null);
 
-    function startTimer() {
+    function startTimer(handleFinishTimer) {
         const startTime = getNow();
         const startReminingSeconds = remainingSeconds;
         const updateInterval = 100;

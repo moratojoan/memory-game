@@ -10,7 +10,7 @@ const possibleGameStates = {
     gameOver: "game-over"
 };
 
-export function useGame(cardsActions, scoreActions, timerActions) {
+export function useGame({ remainingSeconds }, {cardsActions, scoreActions, timerActions}) {
     const [state, setState] = useState(possibleGameStates.readyToStart);
 
 
@@ -23,8 +23,24 @@ export function useGame(cardsActions, scoreActions, timerActions) {
         timerActions.startTimer();
     }
 
+    function handleFinishTimer() {
+        timerActions.stopTimer();
+        if(state === possibleGameStates.win) {
+            return;
+        }
+
+        handleGameOver();
+    }
+
+    function handleGameOver() {
+        const waitingTimeToFinishTheGame = 1000;
+        setTimeout(() => {
+            setState(possibleGameStates.gameOver);
+        }, waitingTimeToFinishTheGame);
+    }
+
     function handleSelectCard(cardSelectedId) {
-        if(state !== possibleGameStates.turnInProgress) {
+        if(playerHasWonTheGame()) {
             return;
         }
 
@@ -85,12 +101,22 @@ export function useGame(cardsActions, scoreActions, timerActions) {
         return state === possibleGameStates.win;
     }
 
+    function playerHasLostTheGame() {
+        return state === possibleGameStates.gameOver;
+    }
+
     function handleNewGame() {
         cardsActions.prepareNewCards();
         scoreActions.resetScore();
         timerActions.resetTimer();
         setState(possibleGameStates.readyToStart);
     }
+
+    useEffect(() => {
+        if(remainingSeconds === 0) {
+            handleFinishTimer();
+        }
+    }, [remainingSeconds]);
 
     useEffect(() => {
         if(state === possibleGameStates.cardSelected) {
@@ -108,7 +134,8 @@ export function useGame(cardsActions, scoreActions, timerActions) {
             handleStartGame,
             handleNewGame,
             handleSelectCard,
-            playerHasWonTheGame
+            playerHasWonTheGame,
+            playerHasLostTheGame
         }
     }
 }

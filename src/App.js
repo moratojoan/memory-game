@@ -18,7 +18,7 @@ export default function App() {
     } = useCards(images);
     const {
         score,
-        actions: socreActions
+        actions: scoreActions
     } = useScore();
     const {
         remainingSeconds,
@@ -26,7 +26,13 @@ export default function App() {
     } = useTimer();
     const {
         actions: gameActions
-    } = useGame(cardsActions, socreActions, timerActions);
+    } = useGame({
+        remainingSeconds
+    }, {
+        cardsActions,
+        scoreActions,
+        timerActions
+    });
 
     return (
         <div>
@@ -51,6 +57,19 @@ export default function App() {
                     <p>Remaining time: {remainingSeconds} seconds</p>
                     <button onClick={gameActions.handleNewGame}>
                         New Game
+                    </button>
+                </div>
+            </Modal>
+            <Modal
+                isOpen={gameActions.playerHasLostTheGame()}
+            >
+                <div>
+                    <h1>Game Over</h1>
+                    <p>You have lost the game...</p>
+                    <p>Score: {score}</p>
+                    <p>Remaining time: {remainingSeconds} seconds</p>
+                    <button onClick={gameActions.handleNewGame}>
+                        Try again
                     </button>
                 </div>
             </Modal>
