@@ -1,3 +1,5 @@
+import Layout from './Layout';
+
 import Cards from './Cards';
 import Score from './Score';
 import Timer from './Timer';
@@ -35,18 +37,31 @@ export default function App() {
     });
 
     return (
-        <div>
-            <Cards
-                cards={cards}
-                onSelectCard={gameActions.handleSelectCard}
+        <>
+            <Layout
+                title="Github Memory"
+                boardGame={
+                    <Cards
+                        cards={cards}
+                        onSelectCard={gameActions.handleSelectCard}
+                    />
+                }
+                gameInfo={
+                    <>
+                        <Score score={score} />
+                        <Timer seconds={remainingSeconds} />
+                    </>
+                }
+                startGameButton={
+                    <>
+                        {gameActions.gameIsReadyToStart() && (
+                            <button onClick={gameActions.handleStartGame}>
+                                Start Game
+                            </button>
+                        )}
+                    </>
+                }
             />
-            <Score score={score} />
-            <Timer seconds={remainingSeconds} />
-            {gameActions.gameIsReadyToStart() && (
-                <button onClick={gameActions.handleStartGame}>
-                    Start Game
-                </button>
-            )}
             <Modal
                 isOpen={gameActions.playerHasWonTheGame()}
             >
@@ -73,6 +88,6 @@ export default function App() {
                     </button>
                 </div>
             </Modal>
-        </div>
+        </>
     );
 }
