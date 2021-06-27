@@ -3,7 +3,8 @@ import Layout from './Layout';
 import Cards from './Cards';
 import Score from './Score';
 import Timer from './Timer';
-import Modal from './Modal';
+import WinGameModal from './WinGameModal';
+import GameOverModal from './GameOverModal';
 
 import { useImages } from './useImages';
 import { useCards } from './useCards';
@@ -62,32 +63,18 @@ export default function App() {
                     </>
                 }
             />
-            <Modal
+            <WinGameModal
                 isOpen={gameActions.playerHasWonTheGame()}
-            >
-                <div>
-                    <h1>Congratulations!</h1>
-                    <p>You have won the game!</p>
-                    <p>Score: {score}</p>
-                    <p>Remaining time: {remainingSeconds} seconds</p>
-                    <button onClick={gameActions.handleNewGame}>
-                        New Game
-                    </button>
-                </div>
-            </Modal>
-            <Modal
+                score={score}
+                remainingSeconds={remainingSeconds}
+                onClickNewGame={gameActions.handleNewGame}
+            />
+            <GameOverModal
                 isOpen={gameActions.playerHasLostTheGame()}
-            >
-                <div>
-                    <h1>Game Over</h1>
-                    <p>You have lost the game...</p>
-                    <p>Score: {score}</p>
-                    <p>Remaining time: {remainingSeconds} seconds</p>
-                    <button onClick={gameActions.handleNewGame}>
-                        Try again
-                    </button>
-                </div>
-            </Modal>
+                score={score}
+                remainingSeconds={remainingSeconds}
+                onClickNewGame={gameActions.handleNewGame}
+            />
         </>
     );
 }
