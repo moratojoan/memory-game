@@ -25,11 +25,11 @@ export function useCards(images) {
     }
 
     function handleEquivalencyOfCardsSelected(cardsSelected) {
-        if(cardsSelected.length < 2) {
-            return;
-        }
-
         return new Promise(resolve => {
+            if(cardsSelected.length < 2) {
+                return resolve(false);
+            }
+
             function unselectAllCards() {
                 const cardsUpdated = cards.map(card => ({
                     ...card,

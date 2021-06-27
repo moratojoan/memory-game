@@ -10,21 +10,26 @@ const possibleGameStates = {
     gameOver: "game-over"
 };
 
-export function useGame(cards, actions) {
+export function useGame(cards, actions, scoreActions) {
     const [state, setState] = useState(possibleGameStates.readyToStart);
 
     function handleStartGame() {
         setState(possibleGameStates.turnInProgress);
     }
 
-    async function handleCheckTurn(handleEquivalencyOfCardsSelected, cardsSelected) {
+    async function handleCheckTurn(cardsSelected, checkCards, addPoints) {
         setState(possibleGameStates.checkTurnStarted);
-        await handleEquivalencyOfCardsSelected(cardsSelected);
+        const equivalentCardsFinded = await checkCards(cardsSelected);
+        if(equivalentCardsFinded) {
+            const pointsOnFindEquivalentCards = 100;
+            addPoints(pointsOnFindEquivalentCards);
+        }
         setState(possibleGameStates.checkTurnEnded);
     }
 
     function handleNewGame() {
         actions.prepareNewCards();
+        scoreActions.resetScore();
         setState(possibleGameStates.readyToStart);
     }
 
@@ -33,8 +38,9 @@ export function useGame(cards, actions) {
             const cardsSelected = cards.filter(({selected}) => selected);
             if(cardsSelected.length === 2) {
                 handleCheckTurn(
+                    cardsSelected,
                     actions.handleEquivalencyOfCardsSelected,
-                    cardsSelected
+                    scoreActions.addPointsToScore
                 );
             }
         } else if(state === possibleGameStates.checkTurnEnded) {
@@ -47,7 +53,7 @@ export function useGame(cards, actions) {
                 setState(possibleGameStates.turnInProgress);
             }
         }
-    }, [state, cards, actions]);
+    }, [state, cards, actions, scoreActions]);
 
     return {
         possibleGameStates,
