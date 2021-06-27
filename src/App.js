@@ -49,8 +49,8 @@ export default function App() {
                 }
                 gameInfo={
                     <>
-                        <Score score={score} />
                         <Timer seconds={remainingSeconds} />
+                        <Score score={score} />
                     </>
                 }
                 startGameButton={
