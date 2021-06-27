@@ -24,15 +24,16 @@ export default function App() {
         possibleGameStates,
         gameState,
         handleStartGame,
-        handleNewGame
-    } = useGame(cards, cardsActions, socreActions);
+        handleNewGame,
+        handleSelectCard
+    } = useGame(cardsActions, socreActions);
 
     return (
         <div>
             <Cards
                 cards={cards}
                 onSelectCard={gameState === possibleGameStates.turnInProgress
-                    ? cardsActions.handleSelectCard
+                    ? handleSelectCard
                     : () => {}
                 }
             />

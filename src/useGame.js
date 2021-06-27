@@ -4,17 +4,23 @@ import { useState, useEffect } from "react";
 const possibleGameStates = {
     readyToStart: "ready-to-start",
     turnInProgress: "turn-in-progress",
+    cardSelected: "card-selected",
     checkTurnStarted: "check-turn-started",
     checkTurnEnded: "check-turn-ended",
     win: "win",
     gameOver: "game-over"
 };
 
-export function useGame(cards, cardsActions, scoreActions) {
+export function useGame(cardsActions, scoreActions) {
     const [state, setState] = useState(possibleGameStates.readyToStart);
 
     function handleStartGame() {
         setState(possibleGameStates.turnInProgress);
+    }
+
+    function handleSelectCard(cardSelectedId) {
+        cardsActions.handleSelectCard(cardSelectedId);
+        setState(possibleGameStates.cardSelected);
     }
 
     async function handleCheckTurn(cardsSelected, checkCards, addPoints) {
@@ -34,14 +40,17 @@ export function useGame(cards, cardsActions, scoreActions) {
     }
 
     useEffect(() => {
-        if(state === possibleGameStates.turnInProgress) {
+        if(state === possibleGameStates.cardSelected) {
             const cardsSelected = cardsActions.getSelectedCards();
-            if(cardsSelected.length === 2) {
+            const numberOfSelectedCardsToFinishATurn = 2;
+            if(cardsSelected.length === numberOfSelectedCardsToFinishATurn) {
                 handleCheckTurn(
                     cardsSelected,
                     cardsActions.handleEquivalencyOfCardsSelected,
                     scoreActions.addPointsToScore
                 );
+            } else {
+                setState(possibleGameStates.turnInProgress);
             }
         } else if(state === possibleGameStates.checkTurnEnded) {
             if(cardsActions.allCardsHaveBeenDiscovered()) {
@@ -53,12 +62,13 @@ export function useGame(cards, cardsActions, scoreActions) {
                 setState(possibleGameStates.turnInProgress);
             }
         }
-    }, [state, cards, cardsActions, scoreActions]);
+    }, [state]);
 
     return {
         possibleGameStates,
         gameState: state,
         handleStartGame,
-        handleNewGame
+        handleNewGame,
+        handleSelectCard
     }
 }
