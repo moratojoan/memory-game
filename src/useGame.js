@@ -10,7 +10,7 @@ const possibleGameStates = {
     gameOver: "game-over"
 };
 
-export function useGame(cardsActions, scoreActions) {
+export function useGame(cardsActions, scoreActions, timerActions) {
     const [state, setState] = useState(possibleGameStates.readyToStart);
 
 
@@ -20,6 +20,7 @@ export function useGame(cardsActions, scoreActions) {
 
     function handleStartGame() {
         setState(possibleGameStates.turnInProgress);
+        timerActions.startTimer();
     }
 
     function handleSelectCard(cardSelectedId) {
@@ -68,6 +69,12 @@ export function useGame(cardsActions, scoreActions) {
             return;
         }
 
+        handleWinTheGame();
+    }
+
+    function handleWinTheGame() {
+        timerActions.stopTimer();
+
         const waitingTimeToFinishTheGame = 1000;
         setTimeout(() => {
             setState(possibleGameStates.win);
@@ -81,6 +88,7 @@ export function useGame(cardsActions, scoreActions) {
     function handleNewGame() {
         cardsActions.prepareNewCards();
         scoreActions.resetScore();
+        timerActions.resetTimer();
         setState(possibleGameStates.readyToStart);
     }
 

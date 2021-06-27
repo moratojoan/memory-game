@@ -1,11 +1,13 @@
 import Cards from './Cards';
 import Score from './Score';
+import Timer from './Timer';
 import Modal from './Modal';
 
 import { useImages } from './useImages';
 import { useCards } from './useCards';
 import { useGame } from './useGame';
 import { useScore } from './useScore';
+import { useTimer } from './useTimer';
 
 
 export default function App() {
@@ -19,8 +21,12 @@ export default function App() {
         actions: socreActions
     } = useScore();
     const {
+        remainingSeconds,
+        actions: timerActions
+    } = useTimer();
+    const {
         actions: gameActions
-    } = useGame(cardsActions, socreActions);
+    } = useGame(cardsActions, socreActions, timerActions);
 
     return (
         <div>
@@ -29,6 +35,7 @@ export default function App() {
                 onSelectCard={gameActions.handleSelectCard}
             />
             <Score score={score} />
+            <Timer seconds={remainingSeconds} />
             {gameActions.gameIsReadyToStart() && (
                 <button onClick={gameActions.handleStartGame}>
                     Start Game
@@ -41,6 +48,7 @@ export default function App() {
                     <h1>Congratulations!</h1>
                     <p>You have won the game!</p>
                     <p>Score: {score}</p>
+                    <p>Remaining time: {remainingSeconds} seconds</p>
                     <button onClick={gameActions.handleNewGame}>
                         New Game
                     </button>
