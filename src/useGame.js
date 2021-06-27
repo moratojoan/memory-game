@@ -40,7 +40,7 @@ export function useGame({ remainingSeconds }, {cardsActions, scoreActions, timer
     }
 
     function handleSelectCard(cardSelectedId) {
-        if(playerHasWonTheGame()) {
+        if(state !== possibleGameStates.turnInProgress) {
             return;
         }
 
