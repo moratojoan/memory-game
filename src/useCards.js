@@ -14,7 +14,7 @@ export function useCards(images) {
     function handleSelectCard(id) {
         const cardsUpdated = cards.map(card => {
             if(card.id !== id) return card;
-            if(card.selected) return card;
+            if(card.selected || card.discovered) return card;
 
             return {
                 ...card,
