@@ -79,10 +79,12 @@ export function useCards(images) {
 
     return {
         cards,
-        handleSelectCard,
-        handleEquivalencyOfCardsSelected,
-        allCardsHaveBeenDiscovered,
-        prepareNewCards: () => prepareNewCards(images)
+        actions: {
+            handleSelectCard,
+            handleEquivalencyOfCardsSelected,
+            allCardsHaveBeenDiscovered,
+            prepareNewCards: () => prepareNewCards(images)
+        }
     };
 }
 

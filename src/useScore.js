@@ -15,7 +15,9 @@ export function useScore() {
 
     return {
         score,
-        addPointsToScore,
-        resetScore
+        actions: {
+            addPointsToScore,
+            resetScore
+        }
     }
 }

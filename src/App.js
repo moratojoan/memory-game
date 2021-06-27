@@ -14,36 +14,25 @@ export default function App() {
     const images = useImages();
     const {
         cards,
-        handleSelectCard,
-        handleEquivalencyOfCardsSelected,
-        allCardsHaveBeenDiscovered,
-        prepareNewCards
+        actions: cardsActions
     } = useCards(images);
     const {
         score,
-        addPointsToScore,
-        resetScore
+        actions: socreActions
     } = useScore();
     const {
         possibleGameStates,
         gameState,
         handleStartGame,
         handleNewGame
-    } = useGame(cards, {
-        handleEquivalencyOfCardsSelected,
-        allCardsHaveBeenDiscovered,
-        prepareNewCards
-    }, {
-        addPointsToScore,
-        resetScore
-    });
+    } = useGame(cards, cardsActions, socreActions);
 
     return (
         <div>
             <Cards
                 cards={cards}
                 onSelectCard={gameState === possibleGameStates.turnInProgress
-                    ? handleSelectCard
+                    ? cardsActions.handleSelectCard
                     : () => {}
                 }
             />
