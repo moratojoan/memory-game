@@ -35,7 +35,7 @@ export function useGame(cards, cardsActions, scoreActions) {
 
     useEffect(() => {
         if(state === possibleGameStates.turnInProgress) {
-            const cardsSelected = cards.filter(({selected}) => selected);
+            const cardsSelected = cardsActions.getSelectedCards();
             if(cardsSelected.length === 2) {
                 handleCheckTurn(
                     cardsSelected,

@@ -68,6 +68,10 @@ export function useCards(images) {
         });
     }
 
+    function getSelectedCards() {
+        return cards.filter(({selected}) => selected);
+    }
+
     function allCardsHaveBeenDiscovered() {
         return cards.every(({discovered}) => discovered);
     }
@@ -83,7 +87,8 @@ export function useCards(images) {
             handleSelectCard,
             handleEquivalencyOfCardsSelected,
             allCardsHaveBeenDiscovered,
-            prepareNewCards: () => prepareNewCards(images)
+            prepareNewCards: () => prepareNewCards(images),
+            getSelectedCards
         }
     };
 }
