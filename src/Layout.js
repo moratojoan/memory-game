@@ -1,3 +1,4 @@
+import './Layout.css';
 
 
 export default function Layout({
@@ -8,23 +9,26 @@ export default function Layout({
 }) {
 
     return (
-        <main>
-            <header>
+        <div className="layout-container">
+            <header className="title-box">
                 <h1>{title}</h1>
             </header>
-            <section>
-                <div>
-                    {boardGame}
-                </div>
-                <div>
-                    {gameInfo}
-                </div>
-                {startGameButton && (
-                    <div>
-                        {startGameButton}
+            <main>
+                <section className="game-container">
+                    <div className="game-board-box">
+                        {boardGame}
                     </div>
-                )}
-            </section>
-        </main>
+
+                    {startGameButton && (
+                        <div>
+                            {startGameButton}
+                        </div>
+                    )}
+                    <div className="game-info-box">
+                        {gameInfo}
+                    </div>
+                </section>
+            </main>
+        </div>
     )
 }
