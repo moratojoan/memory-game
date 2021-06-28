@@ -1,15 +1,13 @@
 import { useState } from "react";
 
+import { getNow } from '../utils/dateTime';
 
-function getNow() {
-    return Date.now();
-}
 
 export function useTimer() {
     const [remainingSeconds, setRemainingSeconds] = useState(60);
     const [setIntervalId, setSetIntervalId] = useState(null);
 
-    function startTimer(handleFinishTimer) {
+    function startTimer() {
         const startTime = getNow();
         const startReminingSeconds = remainingSeconds;
         const updateInterval = 100;
