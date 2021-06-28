@@ -29,11 +29,16 @@ export default function App() {
     const {
         actions: gameActions
     } = useGame({
-        remainingSeconds
-    }, {
-        cardsActions,
-        scoreActions,
-        timerActions
+        cards: {
+            actions: cardsActions
+        },
+        score: {
+            actions: scoreActions
+        },
+        timer: {
+            remainingSeconds,
+            actions: timerActions
+        }
     });
 
     return (

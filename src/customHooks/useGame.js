@@ -13,7 +13,18 @@ const possibleGameStates = {
 const numberOfSelectedCardsToFinishATurn = 2;
 const pointsOnFindEquivalentCards = 100;
 
-export function useGame({ remainingSeconds }, {cardsActions, scoreActions, timerActions}) {
+export function useGame({
+    cards: {
+        actions: cardsActions
+    },
+    score: {
+        actions: scoreActions
+    },
+    timer: {
+        remainingSeconds,
+        actions: timerActions
+    }
+}) {
     const [state, setState] = useState(possibleGameStates.readyToStart);
 
 
