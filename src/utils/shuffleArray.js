@@ -1,15 +1,16 @@
 
 
 export default function fisherYates(array){
-    var count = array.length,
-        randomnumber,
-        temp;
+    let count = array.length;
+    let randomNumber;
+    let temp;
 
-    while(count){
-        randomnumber = Math.random() * count-- | 0;
+    while(count) {
+        randomNumber = Math.floor(Math.random() * count);
+        count--;
         temp = array[count];
-        array[count] = array[randomnumber];
-        array[randomnumber] = temp
+        array[count] = array[randomNumber];
+        array[randomNumber] = temp
     }
 
     return array;
