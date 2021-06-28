@@ -4,6 +4,7 @@ import './Card.css';
 export default function Card({
     url,
     alt,
+    selectable,
     selected,
     discovered,
     onClick
@@ -15,7 +16,7 @@ export default function Card({
             onClick={onClick}
         >
             <div className="card-inner">
-                <div className="card-front">
+                <div className={selectable ? "card-front pointer" : "card-front"}>
                     ?
                 </div>
                 <div className="card-back">

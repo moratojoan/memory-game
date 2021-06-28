@@ -16,7 +16,7 @@
     transform: rotateY(180deg);
 }
 
-.card-front {
+.pointer {
     cursor: pointer;
 }
 

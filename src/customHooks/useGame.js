@@ -18,6 +18,10 @@ export function useGame({ remainingSeconds }, {cardsActions, scoreActions, timer
         return state === possibleGameStates.readyToStart;
     }
 
+    function turnIsInProgress() {
+        return state === possibleGameStates.turnInProgress;
+    }
+
     function handleStartGame() {
         setState(possibleGameStates.turnInProgress);
         timerActions.startTimer();
@@ -131,6 +135,7 @@ export function useGame({ remainingSeconds }, {cardsActions, scoreActions, timer
         gameState: state,
         actions: {
             gameIsReadyToStart,
+            turnIsInProgress,
             handleStartGame,
             handleNewGame,
             handleSelectCard,

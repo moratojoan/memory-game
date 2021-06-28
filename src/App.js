@@ -43,6 +43,7 @@ export default function App() {
                 boardGame={
                     <Cards
                         cards={cards}
+                        selectable={gameActions.turnIsInProgress()}
                         onSelectCard={gameActions.handleSelectCard}
                     />
                 }
