@@ -1,16 +1,15 @@
-import Layout from './Layout';
+import Layout from './components/Layout';
+import Cards from './components/Cards';
+import Score from './components/Score';
+import Timer from './components/Timer';
+import WinGameModal from './components/WinGameModal';
+import GameOverModal from './components/GameOverModal';
 
-import Cards from './Cards';
-import Score from './Score';
-import Timer from './Timer';
-import WinGameModal from './WinGameModal';
-import GameOverModal from './GameOverModal';
-
-import { useImages } from './useImages';
-import { useCards } from './useCards';
-import { useGame } from './useGame';
-import { useScore } from './useScore';
-import { useTimer } from './useTimer';
+import { useImages } from './customHooks/useImages';
+import { useCards } from './customHooks/useCards';
+import { useGame } from './customHooks/useGame';
+import { useScore } from './customHooks/useScore';
+import { useTimer } from './customHooks/useTimer';
 
 
 export default function App() {

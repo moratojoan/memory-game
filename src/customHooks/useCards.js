@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-import shuffleArray from './shuffleArray';
-import generateUid from './generateUid';
+import shuffleArray from '../utils/shuffleArray';
+import generateUid from '../utils/generateUid';
 
 
 export function useCards(images) {
