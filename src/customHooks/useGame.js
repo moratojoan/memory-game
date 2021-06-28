@@ -10,6 +10,9 @@ const possibleGameStates = {
     gameOver: "game-over"
 };
 
+const numberOfSelectedCardsToFinishATurn = 2;
+const pointsOnFindEquivalentCards = 100;
+
 export function useGame({ remainingSeconds }, {cardsActions, scoreActions, timerActions}) {
     const [state, setState] = useState(possibleGameStates.readyToStart);
 
@@ -53,7 +56,6 @@ export function useGame({ remainingSeconds }, {cardsActions, scoreActions, timer
     }
 
     function handleCardHasBeenSelected() {
-        const numberOfSelectedCardsToFinishATurn = 2;
         const cardsSelected = cardsActions.getSelectedCards();
 
         const movesInATurnCompleted = cardsSelected.length === numberOfSelectedCardsToFinishATurn;
@@ -70,7 +72,6 @@ export function useGame({ remainingSeconds }, {cardsActions, scoreActions, timer
         if(equivalentCards) {
             cardsActions.markSelectedCardsAsDiscovered(cardsSelected);
 
-            const pointsOnFindEquivalentCards = 100;
             scoreActions.addPointsToScore(pointsOnFindEquivalentCards);
             setState(possibleGameStates.turnFinished);
         } else {

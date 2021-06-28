@@ -1,8 +1,10 @@
 import { useState } from "react";
 
 
+const initialScore = 0;
+
 export function useScore() {
-    const [score, setScore] = useState(0);
+    const [score, setScore] = useState(initialScore);
 
     function addPointsToScore(points) {
         const newScore = score + points;
@@ -10,7 +12,7 @@ export function useScore() {
     }
 
     function resetScore() {
-        setScore(0);
+        setScore(initialScore);
     }
 
     return {

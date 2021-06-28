@@ -3,8 +3,10 @@ import { useState } from "react";
 import { getNow } from '../utils/dateTime';
 
 
+const timeAvailableToFinishTheGame = 60;
+
 export function useTimer() {
-    const [remainingSeconds, setRemainingSeconds] = useState(60);
+    const [remainingSeconds, setRemainingSeconds] = useState(timeAvailableToFinishTheGame);
     const [setIntervalId, setSetIntervalId] = useState(null);
 
     function startTimer() {
@@ -30,7 +32,7 @@ export function useTimer() {
     }
 
     function resetTimer() {
-        setRemainingSeconds(60);
+        setRemainingSeconds(timeAvailableToFinishTheGame);
     }
 
     return {
